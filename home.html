@@ -12,17 +12,22 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style_home.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
 
     <title>Profile</title>
   </head>
   <body>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <i class='bx bx-moon'></i>
+    </button>
     <div class="wrapper">
       <div class="cover cover-left"></div>
       <div class="cover cover-right "></div>
       <div class="book">
         <div class="book-page page-left ">
           <div class="profile-page">
-            <img src="images/image00003.jpeg" alt="" />
+            <img src="images/1743374201126.jpg" alt="" />
             <h1>Touaiti Mazen</h1>
             <h3>Automaticien & web Developer</h3>
             <div class="social-media">
@@ -259,11 +264,12 @@
             <div class="page-back">
               <h1 class="title">Contact Me</h1>
               <div class="contact-box">
-                <form action="#">
-                  <input type="text" class="field" placeholder="Full Name" required>
-                  <input type="email" class="field" placeholder="Email Address" required>
-                  <textarea name="" id="" cols="30" rows="10" class="field" placeholder="Your Message" required></textarea>
+                <form id="contact-form">
+                  <input type="text" class="field" placeholder="Full Name" required id="name">
+                  <input type="email" class="field" placeholder="Email Address" required id="email">
+                  <textarea id="message" cols="30" rows="10" class="field" placeholder="Your Message" required></textarea>
                   <input type="submit" class="btn" value="Send Message">
+                  <div id="form-message"></div>
                 </form>
               </div>
             <span class="number-page">6</span>
@@ -276,6 +282,9 @@
             </a>
           </div>
         </div>
+      </div>
+      <div class="loader-wrapper">
+        <div class="loader"></div>
       </div>
     <script src="main.js"></script>
   </body>

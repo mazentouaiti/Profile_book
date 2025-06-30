@@ -88,3 +88,142 @@ setTimeout(() => {
      }, 500);
    }, (index + 1) * 200 + 2100);
  });
+
+
+ // Add at bottom of file
+
+// Dark Mode Toggle
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle.querySelector('i');
+
+themeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('light-mode');
+  if (document.body.classList.contains('light-mode')) {
+    themeIcon.classList.replace('bx-moon', 'bx-sun');
+    localStorage.setItem('theme', 'light');
+  } else {
+    themeIcon.classList.replace('bx-sun', 'bx-moon');
+    localStorage.setItem('theme', 'dark');
+  }
+});
+
+// Load saved theme
+if (localStorage.getItem('theme') === 'light') {
+  document.body.classList.add('light-mode');
+  themeIcon.classList.replace('bx-moon', 'bx-sun');
+}
+
+// Form submission
+const contactForm = document.getElementById('contact-form');
+const formMessage = document.getElementById('form-message');
+const loader = document.querySelector('.loader-wrapper');
+
+contactForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const message = document.getElementById('message').value;
+  
+  if (!name || !email || !message) {
+    showMessage('Please fill all fields', 'error');
+    return;
+  }
+  
+  if (!validateEmail(email)) {
+    showMessage('Please enter a valid email', 'error');
+    return;
+  }
+  
+  loader.classList.add('active');
+  
+  // Using SMTPJS for email sending (requires configuration)
+  Email.send({
+    SecureToken: "YOUR_SECURE_TOKEN", // Get from smtpjs.com
+    To: 'your@email.com',
+    From: email,
+    Subject: `Message from ${name}`,
+    Body: message
+  }).then(
+    () => {
+      loader.classList.remove('active');
+      showMessage('Message sent successfully!', 'success');
+      contactForm.reset();
+    },
+    (error) => {
+      loader.classList.remove('active');
+      showMessage(`Error: ${error}`, 'error');
+    }
+  );
+});
+
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+function showMessage(text, type) {
+  formMessage.textContent = text;
+  formMessage.className = '';
+  formMessage.classList.add(type);
+  
+  setTimeout(() => {
+    formMessage.textContent = '';
+    formMessage.className = '';
+  }, 5000);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') {
+    const nextBtn = document.querySelector('.nextprev-btn:not(.back)');
+    if (nextBtn) nextBtn.click();
+  } else if (e.key === 'ArrowLeft') {
+    const prevBtn = document.querySelector('.nextprev-btn.back');
+    if (prevBtn) prevBtn.click();
+  } else if (e.key === 'Escape') {
+    const backProfile = document.querySelector('.back-profile');
+    if (backProfile) backProfile.click();
+  }
+});
+
+// Add hover effect to skills
+const skills = document.querySelectorAll('.skills-content .content span');
+skills.forEach(skill => {
+  skill.addEventListener('mouseenter', () => {
+    skill.style.transform = 'scale(1.1)';
+    skill.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+  });
+  
+  skill.addEventListener('mouseleave', () => {
+    skill.style.transform = 'scale(1)';
+    skill.style.boxShadow = 'none';
+  });
+});
+
+// Add page swipe detection on mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  const swipeThreshold = 50;
+  
+  if (touchStartX - touchEndX > swipeThreshold) {
+    // Swipe left - next page
+    const nextBtn = document.querySelector('.nextprev-btn:not(.back)');
+    if (nextBtn) nextBtn.click();
+  } else if (touchEndX - touchStartX > swipeThreshold) {
+    // Swipe right - previous page
+    const prevBtn = document.querySelector('.nextprev-btn.back');
+    if (prevBtn) prevBtn.click();
+  }
+}
